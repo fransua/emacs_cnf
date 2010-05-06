@@ -1,5 +1,20 @@
-(setq load-path (cons "~/.emacs.git/emacs.d" load-path))
+(setq load-path (cons "~/.emacs.dev/emacs.d/" load-path))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; python
+; apt-get install ipython
+; apt-get install pymacs
+; apt-get install pylint
+; apt-get install python-mode
+
+; if file ends with .py -> python mode
+(setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
+
+;ipython
+(require 'ipython)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; general
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
