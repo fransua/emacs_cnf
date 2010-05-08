@@ -1,5 +1,8 @@
 (setq load-path (cons "~/.emacs.dev/emacs.d/" load-path))
 
+(setq load-path (cons (expand-file-name "~/.emacs.dev/emacs.d/lisp")
+		      load-path))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; python
 ; apt-get install ipython
@@ -10,9 +13,19 @@
 
 ; if file ends with .py -> python mode
 (setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
-
-;ipython
 (require 'ipython)
+(add-hook 'python-mode-hook 'my-python-hook)
+; this getz called after python mode is enabled
+(defun my-python-hook ()
+  ; Shift + arrows indent
+  (local-set-key [\M-\right] 'py-shift-region-right)
+  (local-set-key [\M-\left]  'py-shift-region-left)
+  (show-paren-mode 1)
+)
+
+;templates
+(require 'template)
+(template-initialize)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; general
@@ -29,7 +42,13 @@
  '(tool-bar-mode nil nil (tool-bar))
  '(inhibit-startup-screen t)
  '(truncate-lines t)
+ '(show-paren-mode t)
+ '(setq visible-bell t)
  )
+
+; key-bindings
+(global-unset-key "\M-g")
+(global-set-key "\M-g" 'goto-line)
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
