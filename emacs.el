@@ -1,7 +1,7 @@
 (setq load-path (cons "~/.emacs.dev/emacs.d/" load-path))
 
 (setq load-path (cons (expand-file-name "~/.emacs.dev/emacs.d/lisp")
-		      load-path))
+		      load-path ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; python
