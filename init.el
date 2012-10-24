@@ -1,7 +1,6 @@
 
 (setq frame-title-format "%f")
-(setq load-path (cons (expand-file-name "~/.emacs.d/lisp")
-		      load-path ))
+(setq load-path (cons "~/.emacs.d/lisp" load-path))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -516,10 +516,10 @@ templates, i\.e\., just searches in `template-default-directories'."
 		  function)))
 
 (defcustom template-default-directories
-  (cons (if (and (not (file-directory-p "~/.emacs.dev/emacs.d/lisp/templates/"))
-		 (file-directory-p "~/.emacs.dev/emacs.d/lisp/templates"))
-	    (expand-file-name "~/.emacs.dev/emacs.d/lisp/templates/")
-	  (expand-file-name "~/.emacs.dev/emacs.d/lisp/templates/"))
+  (cons (if (and (not (file-directory-p "~/.emacs.d/templates/"))
+		 (file-directory-p "~/.emacs.d/templates"))
+	    (expand-file-name "~/.emacs.d/templates/")
+	  (expand-file-name "~/.emacs.d/templates/"))
 	(and (fboundp 'locate-data-directory)
 	     (let ((dir (locate-data-directory "template")))
 	       (and dir (list dir)))))
@@ -1864,7 +1864,7 @@ matching entry can be found in `template-derivation-alist'."
 	(setq dir nil)))
     (or dir
 	(car template-default-directories)
-	(expand-file-name "~/.emacs.dev/emacs.d/lisp/templates/"))))
+	(expand-file-name "~/.emacs.d/templates/"))))
 
 
 ;;;===========================================================================
