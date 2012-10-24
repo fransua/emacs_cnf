@@ -360,12 +360,11 @@ in the current *Python* session."
                           (setq ugly-return (concat ugly-return string))
                           (delete-region comint-last-output-start
                                          (process-mark (get-buffer-process (current-buffer)))))))))
-	;(message (format "#DEBUG pattern: '%s'" pattern))
+                                        ;(message (format "#DEBUG pattern: '%s'" pattern))
         (process-send-string python-process
                               (format ipython-completion-command-string pattern))
         (accept-process-output python-process)
-	
-	;(message (format "DEBUG return: %s" ugly-return))
+                                        ;(message (format "DEBUG return: %s" ugly-return))
         (setq completions
               (split-string (substring ugly-return 0 (position ?\n ugly-return)) sep))
         (setq completion-table (loop for str in completions
