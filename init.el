@@ -1,6 +1,12 @@
 
 (setq frame-title-format "%f")
 (setq load-path (cons "~/.emacs.d/lisp" load-path))
+(setq load-path (cons "~/.emacs.d/epc" load-path))
+(setq load-path (cons "~/.emacs.d/deferred" load-path))
+(setq load-path (cons "~/.emacs.d/auto-complete" load-path))
+;;(setq load-path (cons "~/.emacs.d/jedi" load-path))
+(setq load-path (cons "~/.emacs.d/emacs-jedi" load-path))
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -22,6 +28,13 @@
 ;; this getz called after python mode is enabled
 (defun my-python-hook ()
   (require 'ipython)
+  (require 'jedi)
+  (require 'auto-complete)
+  (global-auto-complete-mode +1)
+  (set-cursor-color "white")
+  (add-hook 'python-mode-hook 'jedi:setup)
+  ;;(add-hook 'python-mode-hook 'jedi:ac-setup)
+  (define-key py-mode-map (kbd "<C-tab>") 'jedi:complete)
   ;; Alt + arrows indent
   (local-set-key [\M-\right] 'py-shift-region-right)
   (local-set-key [\M-\left]  'py-shift-region-left)
@@ -81,6 +94,7 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(blink-cursor-mode nil)
+ '(set-cursor-color "white")
  '(column-number-mode t)
  '(frame-background-mode (quote dark))
  '(inhibit-startup-screen t)
