@@ -1,6 +1,7 @@
 
 (setq frame-title-format "%f")
 (setq load-path (cons "~/.emacs.d/lisp" load-path))
+(setq load-path (cons "~/.emacs.d/auto-complete" load-path))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -22,6 +23,9 @@
 ;; this getz called after python mode is enabled
 (defun my-python-hook ()
   (require 'ipython)
+  (require 'auto-complete)
+  (global-auto-complete-mode +1)
+  (set-cursor-color "white")
   ;; Alt + arrows indent
   (local-set-key [\M-\right] 'py-shift-region-right)
   (local-set-key [\M-\left]  'py-shift-region-left)
