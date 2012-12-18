@@ -4,7 +4,6 @@
 (setq load-path (cons "~/.emacs.d/epc" load-path))
 (setq load-path (cons "~/.emacs.d/deferred" load-path))
 (setq load-path (cons "~/.emacs.d/auto-complete" load-path))
-;;(setq load-path (cons "~/.emacs.d/jedi" load-path))
 (setq load-path (cons "~/.emacs.d/emacs-jedi" load-path))
 
 
@@ -28,13 +27,21 @@
 ;; this getz called after python mode is enabled
 (defun my-python-hook ()
   (require 'ipython)
+  ;; shortcuts enabdl C-c d / C-. (must be before the call of jedi)
+  (setq jedi:setup-keys t)
   (require 'jedi)
   (require 'auto-complete)
   (global-auto-complete-mode +1)
+  ;; just in order to keep on the right side of the force
   (set-cursor-color "white")
+  ;; opening bracket doc
+  (jedi-mode)
   (add-hook 'python-mode-hook 'jedi:setup)
   ;;(add-hook 'python-mode-hook 'jedi:ac-setup)
   (define-key py-mode-map (kbd "<C-tab>") 'jedi:complete)
+  (custom-set-variables
+   '(jedi:complete-on-dot t)
+   )
   ;; Alt + arrows indent
   (local-set-key [\M-\right] 'py-shift-region-right)
   (local-set-key [\M-\left]  'py-shift-region-left)
