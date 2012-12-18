@@ -66,6 +66,59 @@
   ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; latex
+(require 'tex-site)
+(setq TeX-PDF-mode t)
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+(setq TeX-save-query nil)
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+(setq reftex-plug-into-AUCTeX t)
+(add-hook 'doc-view-mode-hook 'auto-revert-mode)
+(autoload 'reftex-mode "reftex" "RefTeX Minor Mode" t)
+(autoload 'turn-on-reftex "reftex" "RefTeX Minor Mode" nil)
+(autoload 'reftex-citation "reftex-cite" "Make citation" nil)
+(autoload 'reftex-index-phrase-mode "reftex-index" "Phrase Mode" t)
+(add-hook 'latex-mode-hook 'turn-on-reftex) ; with Emacs latex mode
+;; (add-hook 'reftex-load-hook 'imenu-add-menubar-index)
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+(setq TeX-auto-save t
+      TeX-newline-function 'reindent-then-newline-and-indent
+      TeX-parse-self t
+      LaTeX-section-hook
+      '(LaTeX-section-heading
+	LaTeX-section-title
+	LaTeX-section-toc
+	LaTeX-section-section
+	LaTeX-section-label))
+;(global-auto-revert-mode t)
+;(add-hook 'LaTeX-mode-hook 'flymake-mode)
+
+;; autocomplete for math to
+;(require 'ac-math)
+;(add-to-list 'ac-modes 'latex-mode)   ; make auto-complete aware of {{{latex-mode}}}
+;(defun ac-latex-mode-setup ()         ; add ac-sources to default ac-sources
+;  (setq ac-sources
+;     (append '(ac-source-math-unicode ac-source-math-latex ac-source-latex-commands)
+;               ac-sources))
+;)
+;(add-hook 'LaTeX-mode-hook 'ac-latex-mode-setup)
+;(ac-flyspell-workaround)
+
+
+(setq ispell-program-name "aspell")
+    ; could be ispell as well, depending on your preferences 
+(setq ispell-dictionary "english")
+    ; this can obviously be set to any language your spell-checking program supports
+(add-hook 'LaTeX-mode-hook 'flyspell-mode)
+(add-hook 'LaTeX-mode-hook 'flyspell-buffer)
+;; to open evince at current page
+(setq TeX-output-view-style
+      (quote
+       (("^pdf$" "." "evince -f %o")
+        ("^html?$" "." "firefox %o"))))
+
 
 ;templates
 (require 'template)
