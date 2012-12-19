@@ -15,6 +15,31 @@
 ; pylint --generate-rcfile > ~/.pylintrc #warnings...
 ; apt-get install python-mode
 
+(setq auto-mode-alist
+      (append '(
+                ("\\.css\\'" . css-mode)
+                ("\\.\\(htm\\|html\\|xhtml\\)$" . html-mode)
+                ("\\.sql$" . sql-mode)
+                ("\\.js$" . js-mode)
+                ("\\.json$" . js-mode)
+                ("\\.js$" . js-mode)
+                ("\\.py" . python-mode)
+                ;; sorted by chapter
+                ("\\.\\(diffs?\\|patch\\|rej\\)\\'" . diff-mode)
+                ("\\.txt$" . org-mode)
+                ("\\.dat$" . ledger-mode)
+
+                ("\\.log$" . text-mode)
+                ("\\.tex$" . LaTeX-mode)
+                ("\\.tpl$" . LaTeX-mode)
+                ("\\.cgi$" . perl-mode)
+                ("[mM]akefile" . makefile-mode)
+                ("\\.bash$" . shell-script-mode)
+                ("\\.expect$" . tcl-mode)
+
+                (".ssh/config\\'" . ssh-config-mode)
+                ("sshd?_config\\'" . ssh-config-mode)
+                ) auto-mode-alist))
 
 ;; PYTHON!
 ;; function declarations:
@@ -75,6 +100,54 @@
 (global-set-key (kbd "C-M-<down>") 'windmove-down)
 (global-set-key (kbd "C-M-<right>") 'windmove-right)
 (global-set-key (kbd "C-M-<left>") 'windmove-left)
+
+;; HIDE/SHOW code folding
+;; Code folding
+(add-hook 'c-mode-common-hook 'hs-minor-mode)
+(add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
+(add-hook 'java-mode-hook 'hs-minor-mode)
+(add-hook 'lisp-mode-hook 'hs-minor-mode)
+(add-hook 'perl-mode-hook 'hs-minor-mode)
+(add-hook 'sh-mode-hook 'hs-minor-mode)
+(add-hook 'python-mode-hook 'hs-minor-mode)
+
+(global-set-key (kbd "<C-s-down>") 'hs-show-all)
+(global-set-key (kbd "<C-s-up>") 'hs-hide-all)
+(global-set-key (kbd "<C-s-right>") 'hs-toggle-hiding)
+
+;; Add the following to your .emacs and uncomment it in order to get a + symbol
+;; in the fringe and a yellow marker indicating the number of hidden lines at
+;; the end of the line for hidden regions:
+(define-fringe-bitmap 'hs-marker [0 24 24 126 126 24 24 0])
+(defcustom hs-fringe-face 'hs-fringe-face
+  "*Specify face used to highlight the fringe on hidden regions."
+  :type 'face
+  :group 'hideshow)
+(defface hs-fringe-face
+  '((t (:foreground "#888" :box (:line-width 2 :color "grey75" :style released-button))))
+  "Face used to highlight the fringe on folded regions"
+  :group 'hideshow)
+(defcustom hs-face 'hs-face
+  "*Specify the face to to use for the hidden region indicator"
+  :type 'face
+  :group 'hideshow)
+(defface hs-face
+  '((t (:background "grey2" :box t)))
+  "Face to hightlight the ... area of hidden regions"
+  :group 'hideshow)
+(defun display-code-line-counts (ov)
+  (when (eq 'code (overlay-get ov 'hs))
+    (let* ((marker-string "*fringe-dummy*")
+           (marker-length (length marker-string))
+           (display-string (format " %d lines...\n" (count-lines (overlay-start ov) (overlay-end ov))))
+           )
+      (overlay-put ov 'help-echo "Hiddent text. C-+ to show, C-M-+ show all, C-s-+ hide all")
+      (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'hs-fringe-face) marker-string)
+      (overlay-put ov 'before-string marker-string)
+      (put-text-property 0 (length display-string) 'face 'hs-face display-string)
+      (overlay-put ov 'display display-string)
+      )))
+(setq hs-set-up-overlay 'display-code-line-counts)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; general
