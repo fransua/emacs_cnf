@@ -1,10 +1,10 @@
 
 (setq frame-title-format "%f")
 (setq load-path (cons "~/.emacs.d/lisp" load-path))
-(setq load-path (cons "~/.emacs.d/epc" load-path))
-(setq load-path (cons "~/.emacs.d/deferred" load-path))
-(setq load-path (cons "~/.emacs.d/auto-complete" load-path))
-(setq load-path (cons "~/.emacs.d/emacs-jedi" load-path))
+(setq load-path (cons "~/.emacs.d/lisp/epc" load-path))
+(setq load-path (cons "~/.emacs.d/lisp/deferred" load-path))
+(setq load-path (cons "~/.emacs.d/lisp/auto-complete" load-path))
+(setq load-path (cons "~/.emacs.d/lisp/emacs-jedi" load-path))
 
 
 
@@ -15,17 +15,18 @@
 ; pylint --generate-rcfile > ~/.pylintrc #warnings...
 ; apt-get install python-mode
 
-; if file ends with .py -> python mode
-(require 'python-mode)
-(setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
-(autoload 'python-mode "python-mode" "Python editing mode." t)
-(setq interpreter-mode-alist(cons '("python" . python-mode)
-				  interpreter-mode-alist))
 
+;; PYTHON!
+;; function declarations:
+(declare-function global-auto-complete-mode            "auto-complete.el")
+(declare-function jedi-mode                            "emacs-jedi.el"   )
+(declare-function flymake-init-create-temp-buffer-copy "flymake.el"      )
+;; run hook
 (add-hook 'python-mode-hook 'my-python-hook)
-
-;; this getz called after python mode is enabled
+;; this is called after python mode is enabled
 (defun my-python-hook ()
+  (defvar jedi:setup-keys)
+  (defvar py-mode-map)
   (require 'ipython)
   ;; shortcuts enabdl C-c d / C-. (must be before the call of jedi)
   (setq jedi:setup-keys t)
@@ -35,13 +36,8 @@
   ;; just in order to keep on the right side of the force
   (set-cursor-color "white")
   ;; opening bracket doc
-  (jedi-mode)
+  (jedi-mode 1)
   (add-hook 'python-mode-hook 'jedi:setup)
-  ;;(add-hook 'python-mode-hook 'jedi:ac-setup)
-  (define-key py-mode-map (kbd "<C-tab>") 'jedi:complete)
-  (custom-set-variables
-   '(jedi:complete-on-dot t)
-   )
   ;; Alt + arrows indent
   (local-set-key [\M-\right] 'py-shift-region-right)
   (local-set-key [\M-\left]  'py-shift-region-left)
@@ -67,19 +63,6 @@
     (add-to-list 'flymake-allowed-file-name-masks
 		 '("\\.py\\'" flymake-pylint-init))
     )
-  ;;To avoid having to mouse hover for the error message, these functions make flymake error messages
-  ;;appear in the minibuffer
-  ;; not working with ipython - completion trick use \M-s key to see message
-  ;; (defun show-fly-err-at-point ()
-  ;;   "If the cursor is sitting on a flymake error, display the message in the minibuffer"
-  ;;   (interactive)
-  ;;   (let ((line-no (line-number-at-pos)))
-  ;;     (dolist (elem flymake-err-info)
-  ;;       (if (eq (car elem) line-no)
-  ;; 	  (let ((err (car (second elem))))
-  ;; 	    (message "%s" (flymake-ler-text err)))))))
-  ;; (add-hook 'post-command-hook 'show-fly-err-at-point)
-  ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 )
 
 
@@ -148,6 +131,9 @@
 (defun perl-replace (start end)
   "Replace a text pattern in a  region using perl expressions"
   (interactive "*r")
+  (defvar regexp)
+  (defvar to-string)
+  (defvar command)
   (setq regexp (read-string "Regexp: "))
   (setq to-string (read-string (concat "[" regexp "] Replacement: ")))
   (setq command (concat "perl -e 's/" regexp "/" to-string "/g' -p"))
