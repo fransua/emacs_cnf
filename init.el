@@ -24,6 +24,7 @@
                 ("\\.json$" . js-mode)
                 ("\\.js$" . js-mode)
                 ("\\.py" . python-mode)
+		("\\.gp" . gp-mode)
                 ;; sorted by chapter
                 ("\\.\\(diffs?\\|patch\\|rej\\)\\'" . diff-mode)
                 ("\\.txt$" . org-mode)
