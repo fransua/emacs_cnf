@@ -143,3 +143,5 @@ if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
 
+# enable some calculus
+c(){ echo "scale=5;$@" | bc;}
