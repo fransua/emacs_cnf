@@ -26,7 +26,7 @@ REPOS = [{'repo': 'https://github.com/tkf/emacs-jedi.git',
 HERE = getcwd()
 
 def clone_repo(repo):
-    return Popen('git clone %s %s' % (repo['repo'], repo['dir']))
+    return Popen('git clone %s %s' % (repo['repo'], repo['dir']), shell=True)
 
 
 def pull_repo(repo):
