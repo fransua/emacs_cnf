@@ -12,8 +12,12 @@ COMPILE = "emacs -batch -L {} -f batch-byte-compile {}"
 
 REPOS = [{'repo': 'https://github.com/tkf/emacs-jedi.git',
           'dir': 'lisp/emacs-jedi', 'py': False},
+         {'repo': 'git clone https://github.com/antonj/Highlight-Indentation-for-Emacs.git',
+          'dir': 'lisp/highlight-indent', 'py': False},
          {'repo': 'https://github.com/kiwanami/emacs-epc.git',
           'dir': 'lisp/epc', 'py': False},
+         {'repo': 'https://github.com/capitaomorte/autopair.git',
+          'dir': 'lisp/autopair', 'py': False},
          {'repo': 'https://github.com/kiwanami/emacs-deferred.git',
           'dir': 'lisp/deferred', 'py': False},
          {'repo': 'https://github.com/auto-complete/auto-complete.git',

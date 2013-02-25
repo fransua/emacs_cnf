@@ -5,6 +5,8 @@
 (setq load-path (cons "~/.emacs.d/lisp/deferred" load-path))
 (setq load-path (cons "~/.emacs.d/lisp/auto-complete" load-path))
 (setq load-path (cons "~/.emacs.d/lisp/emacs-jedi" load-path))
+(setq load-path (cons "~/.emacs.d/lisp/highlight-indent" load-path))
+(setq load-path (cons "~/.emacs.d/lisp/autopair" load-path))
 
 
 
@@ -42,6 +44,9 @@
                 ("sshd?_config\\'" . ssh-config-mode)
                 ) auto-mode-alist))
 
+
+
+
 ;; PYTHON!
 ;; function declarations:
 (declare-function global-auto-complete-mode            "auto-complete.el")
@@ -49,11 +54,30 @@
 (declare-function flymake-init-create-temp-buffer-copy "flymake.el"      )
 ;; run hook
 (add-hook 'python-mode-hook 'my-python-hook)
+;; autopair hook for triple quotes
+(add-hook 'python-mode-hook
+	  #'(lambda ()
+	      (setq autopair-handle-action-fns
+		    (list #'autopair-default-handle-action
+			  #'autopair-python-triple-quote-action))))
 ;; this is called after python mode is enabled
 (defun my-python-hook ()
   (defvar jedi:setup-keys)
   (defvar py-mode-map)
   (require 'ipython)
+  (require 'fill-column-indicator)
+  ;; the litle line
+  (require 'fill-column-indicator)
+  (fci-mode)
+  (setq fci-rule-column 80)
+  (setq fci-rule-color "darkred")
+  ;; highlight columns
+  (require 'highlight-indentation)
+  (highlight-indentation-mode)
+  (set-face-background 'highlight-indentation-face "#0E0E0E")
+  ;; autopair
+  (require 'autopair)
+  (autopair-global-mode)
   ;; shortcuts enabdl C-c d / C-. (must be before the call of jedi)
   (setq jedi:setup-keys t)
   (require 'jedi)
@@ -92,7 +116,7 @@
 )
 
 
-;templates
+;; templates
 (require 'template)
 (template-initialize)
 

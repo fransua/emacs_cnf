@@ -1,11 +1,6 @@
-###  README.tpl --- (>>>POINT<<<)(>>>DIR<<<)
+### README.tpl --- (>>>POINT<<<)(>>>DIR<<<)
 
-## Copyright (>>>YEAR<<<) (>>>USER_NAME<<<)
+## (>>>DATE<<<)
 ##
 ## Author: (>>>AUTHOR<<<)
 ## Keywords: (>>>1<<<)
-
-
-
-
-
