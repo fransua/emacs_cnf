@@ -8,7 +8,8 @@
 (setq load-path (cons "~/.emacs.d/lisp/highlight-indent" load-path))
 (setq load-path (cons "~/.emacs.d/lisp/autopair" load-path))
 
-
+(if window-system
+      (set-frame-size (selected-frame) 165 70))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; python
@@ -70,7 +71,8 @@
   (require 'fill-column-indicator)
   (fci-mode)
   (setq fci-rule-column 80)
-  (setq fci-rule-color "darkred")
+  (setq fci-rule-width 2)
+  (setq fci-rule-color "grey25")
   ;; highlight columns
   (require 'highlight-indentation)
   (highlight-indentation-mode)

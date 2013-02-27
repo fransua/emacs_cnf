@@ -12,7 +12,7 @@ COMPILE = "emacs -batch -L {} -f batch-byte-compile {}"
 
 REPOS = [{'repo': 'https://github.com/tkf/emacs-jedi.git',
           'dir': 'lisp/emacs-jedi', 'py': False},
-         {'repo': 'git clone https://github.com/antonj/Highlight-Indentation-for-Emacs.git',
+         {'repo': 'https://github.com/antonj/Highlight-Indentation-for-Emacs.git',
           'dir': 'lisp/highlight-indent', 'py': False},
          {'repo': 'https://github.com/kiwanami/emacs-epc.git',
           'dir': 'lisp/epc', 'py': False},
@@ -47,10 +47,19 @@ def check_repos():
             processes.append(pull_repo(repo))
         else:
             processes.append(clone_repo(repo))
+    while processes:
+        for proc in processes:
+            if not proc.poll() is None:
+                processes.pop(processes.index(proc))
+                break
+    Popen('sudo -s', shell=True,
+          stdin=PIPE, stdout=PIPE, stderr=PIPE).communicate()
+    for repo in REPOS:
         if repo['py']:
             chdir(repo['dir'])
-            processes.append(Popen('sudo python setup.py install', shell=True))
+            Popen('sudo python setup.py install', shell=True)
             chdir(HERE)
+    Popen('exit', shell=True).communicate()
     while True:
         sleep(2)
         if not None in [p.poll() for p in processes]:
@@ -69,17 +78,25 @@ def main():
             HERE + '/lisp/emacs-jedi/',
             HERE + '/lisp/epc/']
     lib = ' -L '.join(libs)
+    processes = []
     for path, _, lisps in walk('.'):
         for lisp in lisps:
             if not lisp.endswith('.el'):
                 continue
-            _, err= Popen(COMPILE.format(lib, path+'/'+lisp),
-                            shell=True, stdout=PIPE, stderr=PIPE).communicate()
-            print '=' * 80
-            print COMPILE.format(lib, '/'.join((path, lisp)))
-            print '-' * 80
-            if 'Error' in err:
-                print err
+            log = '=' * 80 + '\n'
+            log += COMPILE.format(lib, '/'.join((path, lisp))) + '\n'
+            log += '-' * 80 + '\n'
+            processes.append((log, Popen(COMPILE.format(lib, path+'/'+lisp),
+                                         shell=True, stdout=PIPE, stderr=PIPE)))
+    while processes:
+        for proc in processes:
+            if not proc[1].poll() is None:
+                _, err = proc[1].communicate()
+                if 'Error' in err:
+                    print proc[0]
+                    print err
+                processes.pop(processes.index(proc))
+                break
     chdir(HERE + '/..')
             
 
