@@ -10,22 +10,24 @@ from time import sleep
 
 COMPILE = "emacs -batch -L {} -f batch-byte-compile {}"
 
-REPOS = [{'repo': 'https://github.com/tkf/emacs-jedi.git',
-          'dir': 'lisp/emacs-jedi', 'py': False},
-         {'repo': 'https://github.com/antonj/Highlight-Indentation-for-Emacs.git',
-          'dir': 'lisp/highlight-indent', 'py': False},
-         {'repo': 'https://github.com/kiwanami/emacs-epc.git',
-          'dir': 'lisp/epc', 'py': False},
-         {'repo': 'https://github.com/capitaomorte/autopair.git',
-          'dir': 'lisp/autopair', 'py': False},
-         {'repo': 'https://github.com/kiwanami/emacs-deferred.git',
-          'dir': 'lisp/deferred', 'py': False},
-         {'repo': 'https://github.com/auto-complete/auto-complete.git',
-          'dir': 'lisp/auto-complete', 'py': False},
-         {'repo': 'https://github.com/tkf/python-epc.git',
-          'dir': 'python_lib/python-epc', 'py': True},
-         {'repo': 'https://github.com/davidhalter/jedi.git',
-          'dir': 'python_lib/jedi', 'py': True}]
+REPOS = [
+    {'repo': 'https://github.com/tkf/emacs-jedi.git',
+     'dir': 'lisp/emacs-jedi', 'py': False},
+    {'repo': 'https://github.com/antonj/Highlight-Indentation-for-Emacs.git',
+     'dir': 'lisp/highlight-indent', 'py': False},
+    {'repo': 'https://github.com/kiwanami/emacs-epc.git',
+     'dir': 'lisp/epc', 'py': False},
+    {'repo': 'https://github.com/capitaomorte/autopair.git',
+    'dir': 'lisp/autopair', 'py': False},
+    {'repo': 'https://github.com/kiwanami/emacs-deferred.git',
+     'dir': 'lisp/deferred', 'py': False},
+    {'repo': 'https://github.com/auto-complete/auto-complete.git',
+     'dir': 'lisp/auto-complete', 'py': False},
+    {'repo': 'https://github.com/tkf/python-epc.git',
+     'dir': 'python_lib/python-epc', 'py': True},
+    {'repo': 'https://github.com/davidhalter/jedi.git',
+     'dir': 'python_lib/jedi', 'py': True}
+    ]
          
 HERE = getcwd()
 
@@ -35,23 +37,31 @@ def clone_repo(repo):
 
 def pull_repo(repo):
     chdir(repo['dir'])
-    p = Popen('git pull origin master', shell=True)
+    p = Popen('git pull origin master', stdout=PIPE, shell=True)
     chdir(HERE)
     return p
 
 
 def check_repos():
     processes = []
+    build = False
     for repo in REPOS:
         if '.git' in listdir(repo['dir']):
-            processes.append(pull_repo(repo))
+            processes.append((repo, pull_repo(repo)))
         else:
-            processes.append(clone_repo(repo))
+            processes.append((repo, clone_repo(repo)))
+            if repo['py']:
+                build = True
     while processes:
         for proc in processes:
-            if not proc.poll() is None:
+            if not proc[1].poll() is None:
+                if not "Already up-to-date." in proc[1].communicate()[0]:
+                    if proc[0]['py']:
+                        build = True
                 processes.pop(processes.index(proc))
                 break
+    if not build:
+        return
     Popen('sudo -s', shell=True,
           stdin=PIPE, stdout=PIPE, stderr=PIPE).communicate()
     for repo in REPOS:
