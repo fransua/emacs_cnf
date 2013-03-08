@@ -63,7 +63,12 @@ REPOS = [
     {'dir'   : 'python_lib/jedi', 
      'repo'  : 'https://github.com/davidhalter/jedi.git',
      'branch': 'master', 
-     'python': True}]
+     'python': True},
+    {'dir'   : 'lisp',
+     'repo'  : 'http://www.emacswiki.org/emacs/download/anything.el',
+     'branch': None,
+     'python': False}
+    ]
 
 HERE = getcwd()
 
@@ -80,8 +85,16 @@ LIBS = [HERE + '/lisp',
         HERE + '/lisp/epc/']
 
 def clone_repo(repo):
-    return Popen('git clone {} {}'.format(repo['repo'], repo['dir']), stdout=PIPE,
-                 stderr=PIPE, shell=True)
+    if repo['branch']:
+        return Popen('git clone {} {} -b {}'.format(repo['repo'], repo['dir'],
+                                                    repo['branch']),
+                     stdout=PIPE, stderr=PIPE, shell=True)
+    else:
+        chdir(repo['dir'])
+        p = Popen('wget -N {}'.format(repo['repo']), stdout=PIPE, stderr=PIPE,
+                  shell=True)
+        chdir(HERE)
+        return p
 
 
 def pull_repo(repo):
@@ -111,6 +124,8 @@ def check_repos():
                 if not "Already up-to-date." in msgs[0]:
                     if 'fatal' in msgs[1]:
                         print '\033[31mFAILED\033[m'
+                    elif 'Server file no newer' in msgs[1]:
+                        print '\033[32mOK\033[m'
                     else:
                         print '\033[33mUPDATED\033[m'
                     if proc[0]['python']:

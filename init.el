@@ -74,6 +74,7 @@
 (defun my-python-hook ()
   (require 'helm-config)
   (require 'helm)
+  (require 'anything)
   (defvar py-mode-map)
   (require 'ipython)
 
