@@ -1,0 +1,85 @@
+This package was developped alongside PARI/GP for a long time.
+The original pari.el was written by Annette Hoffman.
+Modified by David Carlisle (JANET: carlisle AT uk.ac.man.cs).
+Modified by Karim Belabas (belabas AT math.u-bordeaux.fr) for gp 2.xxx.
+Modified by Olivier Ramare (ramare AT math.univ-lille1.fr).
+
+=================
+FROM 2.55 to 2.99
+=================
+This version and later ones require the emacs version being at least 20.3.
+If you are used to versions of pari.el below 2.55, we recommend you read
+the README file since a good number of changes have occured in between. Rapidly
+speaking, fontification is now handled by font-lock and not by hilit19, and
+customization is systematically handle by 'custom.el, so that a good number
+of switches have disappeared from the menu-bar. Indentation has appeared
+with the neat effect that C-i/TAB is *not* completion anymore. Completion
+is got by M-i. Variables are now in "positive form", so that for instance
+gp-no-fontify has been replaced by gp-fontifyp and so on. Also, the
+distribution consists of 9 files:
+   pari.el                : the main engine
+   pari-messages.el       : messages
+   pari-fontification.el  : support for font-lock
+   pari-help.el           : info and help, browser
+   pari-completion.el     : completion
+   sli-tools.el           : indentation, version 0.97 or higher
+   pari-conf.el.in        : system dependent variables
+   Makefile               : makefile to create pari-conf.el and to install
+                            the distribution
+   pariemacs-<version>.txt: this file
+=================
+FROM 3.00 to 3.02
+=================
+From version 3.00 onwards, further simplifications have occurred:
+completion files have been completely removed, since the dabbrev mode
+(dynamical abbreviation mode) of emacs is largely enough (M-/ will
+complete word according to words found around, or in nearby buffers).
+
+Also, the distribution consists now of 12 files:
+   pari.el                : the main engine
+   pari-messages.el       : messages
+   pari-fontification.el  : support for font-lock
+   pari-help.el           : info and help, browser
+   pari-completion.el     : completion
+   pari-history.el        : history for shell commands
+   sli-tools.el           : indentation, version 0.97 or higher
+   pari-conf.el.in        : system dependent variables
+   Makefile               : makefile to create pari-conf.el and to install
+                            the distribution
+   CHANGES                : this file
+   README                 : notes on how to install and use pariemacs;
+                            essentially what was called pariemacs-<version>.txt.
+   COPYING                : the GPL license that applies.
+=================
+FROM 3.02 to 3.03
+=================
+-- Modification of the prompt pattern to take care of break>.
+-- Initial message explaining somewhat the levels of loading.
+-- Enhanced the messages concerning lisp functions by adding more
+   cross-references.
+-- Removed call to obsolete font-lock-unset-default in
+   gp-make-gp-prompt-pattern.
+-- Added a menu-item to get the prompt to display time in format (HH:MM:SS).
+-- Face gp-error used in override mode.
+-- font-lock-keywords-only set to t in gp-mode.
+-- Removed gp-search-forward-string-delimiter in pari-fontification.el.
+-- The character " in plots does not trigger string coloring in next
+   input.
+-- Parisize increased to 10000 in process Simple PARI (for the browser).
+-- A menu-bar item has been added to toggle the timer.
+-- The word "time = " for the timer gets a special colour.
+-- The prompt is in bold face now.
+-- Buffers linked with the browser are now invisible because
+   their names gp-functions-list-buffer-name, 
+               gp-function-description-buffer-name,
+               gp-browser-buffer-name, gp-pari-simple-buffer-name
+   now starts with a space.
+-- Copyright extended to 2009 :)
+-- Loading a file when last line is not empty does not lead to a mistake.
+-- Prompt can be changed even if the last line contains something.
+-- Global variables should be at beginning of line.
+-- All words in ?11 except 
+   read readvec install 
+   are now colored in gp-control-statement.
+-- Modified the regexp used in gp-find-global-var for speed
+   (it could be so slow on long buffer that it stopped everything).
