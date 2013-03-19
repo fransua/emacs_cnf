@@ -1,0 +1,91 @@
+
+name   emacs-jedi
+dir    lisp/emacs-jedi
+repo   https://github.com/tkf/emacs-jedi.git
+branch master
+python False
+
+name   emacs-helm
+dir    lisp/emacs-helm
+repo   https://github.com/emacs-helm/helm.git
+branch master
+python False
+
+name   popup-el
+dir    lisp/popup-el
+repo   https://github.com/auto-complete/popup-el.git
+branch master
+python False
+
+name   highlight-indent 
+dir    lisp/highlight-indent 
+repo   https://github.com/antonj/Highlight-Indentation-for-Emacs.git
+branch master 
+python False
+
+name   ctable 
+dir    lisp/ctable 
+repo   https://github.com/kiwanami/emacs-ctable.git
+branch master 
+python False
+
+name   mocker 
+dir    lisp/mocker 
+repo   https://github.com/sigma/mocker.el.git
+branch master 
+python False
+
+name   epc 
+dir    lisp/epc 
+repo   https://github.com/kiwanami/emacs-epc.git
+branch master 
+python False
+
+name   ertx 
+dir    lisp/ertx 
+repo   https://github.com/emacsmirror/ert-x.git
+branch builtin 
+python False
+
+name   autopair 
+dir    lisp/autopair 
+repo   https://github.com/capitaomorte/autopair.git
+branch master 
+python False
+
+name   deferred 
+dir    lisp/deferred 
+repo   https://github.com/kiwanami/emacs-deferred.git
+branch master 
+python False
+
+name   auto-complete 
+dir    lisp/auto-complete 
+repo   https://github.com/auto-complete/auto-complete.git
+branch master 
+python False
+
+name   python-epc 
+dir    python_lib/python-epc 
+repo   https://github.com/tkf/python-epc.git
+branch master 
+python True
+
+name   jedi 
+dir    python_lib/jedi 
+repo   https://github.com/davidhalter/jedi.git
+branch master 
+python True
+
+name   sexpdata
+dir    python_lib/sexpdata
+repo   https://github.com/tkf/sexpdata.git
+branch master
+python True
+
+name   anything
+dir    lisp
+repo   http://www.emacswiki.org/emacs/download/anything.el
+branch None
+python False
+

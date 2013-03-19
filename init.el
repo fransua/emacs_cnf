@@ -93,7 +93,9 @@
     "Restore fci-mode when all popups have closed"
     (when (and (not popup-instances) sanityinc/fci-mode-suppressed)
       (setq sanityinc/fci-mode-suppressed nil)
-      (turn-on-fci-mode)))
+      (turn-on-fci-mode))
+    (when (not visual-line-mode)
+      (visual-line-mode)))
   ;; the little line
   (require 'fill-column-indicator)
   (fci-mode)
@@ -112,7 +114,7 @@
 
   ;; shortcuts enabdl C-c d / C-. (must be before the call of jedi)
   (setq jedi:setup-keys t) ; keys
-  (setq jedi:tooltip-method nil) ; tool-tip popup in minibuffer
+  ;;(setq jedi:tooltip-method nil) ; tool-tip popup in minibuffer
   (eval-when-compile (require 'jedi nil t))
   (require 'jedi)
   (require 'auto-complete)

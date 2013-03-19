@@ -4,85 +4,43 @@
 compile all .el files in here
 """
 
-from os import walk, getcwd, chdir
-from os.path import exists
+from optparse   import OptionParser
+from os         import walk, getcwd, chdir
+from os.path    import exists
 from subprocess import Popen, PIPE
-from time import sleep
+from time       import sleep
+
+
+def get_repos():
+    repos = []
+    for line in open('REPOS.txt'):
+        if line.startswith('name'):
+            repos.append({'name': line.split()[1]})
+        elif line != '\n':
+            key, val = line.split()
+            val = True if val == 'True' else \
+                  False if val == 'False' else \
+                  None if val == 'None' else val
+            repos[-1].update([[key, val]])
+    return repos
+
 
 COMPILE = "emacs -batch -L {} -f batch-byte-compile {}"
+HERE    = getcwd()
+REPOS   = get_repos()
 
-REPOS = [
-    {'dir'   : 'lisp/emacs-jedi',
-     'repo'  : 'https://github.com/tkf/emacs-jedi.git',
-     'branch': 'master',
-     'python': False},
-    {'dir'   : 'lisp/emacs-helm',
-     'repo'  : 'https://github.com/emacs-helm/helm.git',
-     'branch': 'master',
-     'python': False},
-    {'dir'   : 'lisp/popup-el',
-     'repo'  : 'https://github.com/auto-complete/popup-el.git',
-     'branch': 'master',
-     'python': False},
-    {'dir'   : 'lisp/highlight-indent', 
-     'repo'  : 'https://github.com/antonj/Highlight-Indentation-for-Emacs.git',
-     'branch': 'master', 
-     'python': False},
-    {'dir'   : 'lisp/ctable', 
-     'repo'  : 'https://github.com/kiwanami/emacs-ctable.git',
-     'branch': 'master', 
-     'python': False},
-    {'dir'   : 'lisp/mocker', 
-     'repo'  : 'https://github.com/sigma/mocker.el.git',
-     'branch': 'master', 
-     'python': False},
-    {'dir'   : 'lisp/epc', 
-     'repo'  : 'https://github.com/kiwanami/emacs-epc.git',
-     'branch': 'master', 
-     'python': False},
-    {'dir'   : 'lisp/ertx', 
-     'repo'  : 'https://github.com/emacsmirror/ert-x.git',
-     'branch': 'builtin', 
-     'python': False},
-    {'dir'   : 'lisp/autopair', 
-     'repo'  : 'https://github.com/capitaomorte/autopair.git',
-     'branch': 'master', 
-     'python': False},
-    {'dir'   : 'lisp/deferred', 
-     'repo'  : 'https://github.com/kiwanami/emacs-deferred.git',
-     'branch': 'master', 
-     'python': False},
-    {'dir'   : 'lisp/auto-complete', 
-     'repo'  : 'https://github.com/auto-complete/auto-complete.git',
-     'branch': 'master', 
-     'python': False},
-    {'dir'   : 'python_lib/python-epc', 
-     'repo'  : 'https://github.com/tkf/python-epc.git',
-     'branch': 'master', 
-     'python': True},
-    {'dir'   : 'python_lib/jedi', 
-     'repo'  : 'https://github.com/davidhalter/jedi.git',
-     'branch': 'master', 
-     'python': True},
-    {'dir'   : 'lisp',
-     'repo'  : 'http://www.emacswiki.org/emacs/download/anything.el',
-     'branch': None,
-     'python': False}
-    ]
+LIBS    = [HERE + '/lisp',
+           HERE + '/lisp/deferred/',
+           HERE + '/lisp/emacs-helm/',
+           HERE + '/lisp/ctable/',
+           HERE + '/lisp/popup-el/',
+           HERE + '/lisp/auto-complete/',
+           HERE + '/lisp/emacs-jedi/',
+           HERE + '/lisp/mocker/',
+           HERE + '/lisp/ertx/',
+           HERE + '/lisp/autopair/',
+           HERE + '/lisp/epc/']
 
-HERE = getcwd()
-
-LIBS = [HERE + '/lisp',
-        HERE + '/lisp/deferred/',
-        HERE + '/lisp/emacs-helm/',
-        HERE + '/lisp/ctable/',
-        HERE + '/lisp/popup-el/',
-        HERE + '/lisp/auto-complete/',
-        HERE + '/lisp/emacs-jedi/',
-        HERE + '/lisp/mocker/',
-        HERE + '/lisp/ertx/',
-        HERE + '/lisp/autopair/',
-        HERE + '/lisp/epc/']
 
 def clone_repo(repo):
     if repo['branch']:
@@ -105,7 +63,7 @@ def pull_repo(repo):
     return p
 
 
-def check_repos():
+def check_repos(virt):
     processes = []
     build = False
     for repo in REPOS:
@@ -120,7 +78,7 @@ def check_repos():
             if not proc[1].poll() is None:
                 msgs = proc[1].communicate()
                 print 'checking git repo {:<17}'.format(
-                    proc[0]['dir'].split('/')[-1]),
+                    proc[0]['name']),
                 if not "Already up-to-date." in msgs[0]:
                     if 'fatal' in msgs[1]:
                         print '\033[31mFAILED\033[m'
@@ -137,13 +95,16 @@ def check_repos():
     if not build:
         return
     print '\nInstalling python packages',
-    Popen('sudo -s', shell=True,
-          stdin=PIPE, stdout=PIPE, stderr=PIPE).communicate()
+    if not virt:
+        Popen('sudo -s', shell=True,
+              stdin=PIPE, stdout=PIPE, stderr=PIPE).communicate()
     for repo in REPOS:
         if repo['python']:
             print repo['dir'].split('/')[-1]
+            Popen('mkdir -p ' + repo['dir'], shell=True).communicate()
             chdir(repo['dir'])
-            Popen('sudo python setup.py install', shell=True)
+            Popen('{}python setup.py install'.format('' if virt else 'sudo '),
+                  shell=True)
             chdir(HERE)
     Popen('exit', shell=True).communicate()
     while True:
@@ -179,17 +140,39 @@ def lisp_compile():
     
 
 def main():
-    """  https://github.com/tkf/python-epc.git python_lib/python-epc
+    """
     main function
     """
-    print '\nRetrieving last versions from github...'
-    check_repos()
+    opts = get_options()
+    if not opts.compile:
+        print '\nRetrieving last versions from github...'
+        check_repos(opts.virt)
     
     print '\nCompiling lisp...'
     lisp_compile()
     
     print '\nThe End\n\n'
 
+
+def get_options():
+    '''
+    parse option from call
+    '''
+    parser = OptionParser(
+        usage="%prog [options] file [options [file ...]]",
+        description="""\
+        Check for updates, download them and compile/install lisp and python
+        packages.
+        MUST be run from .emacs.d directory
+        """
+        )
+    parser.add_option('--compile', dest='compile', metavar="BOOL",
+                      default=False,
+                      help='compile current packages, no update.')
+    parser.add_option('--virtual', dest='virt', metavar="BOOL",
+                      default=False,
+                      help='sudo not needed, we are working in a virtual env.')
+    return parser.parse_args()[0]
 
 if __name__ == "__main__":
     exit(main())
