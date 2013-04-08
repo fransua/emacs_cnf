@@ -14,6 +14,8 @@ from time       import sleep
 def get_repos():
     repos = []
     for line in open('REPOS.txt'):
+        if line.startswith('#'):
+            continue
         if line.startswith('name'):
             repos.append({'name': line.split()[1]})
         elif line != '\n':
@@ -66,14 +68,18 @@ def pull_repo(repo):
 def check_repos(virt):
     processes = []
     build = False
-    for repo in REPOS:
-        if exists(repo['dir']+'/.git'):
-            processes.append((repo, pull_repo(repo)))
-        else:
-            processes.append((repo, clone_repo(repo)))
-            if repo['python']:
-                build = True
-    while processes:
+    i = 0
+    while True:
+        if len(processes) < 4 and i < len(REPOS):
+            repo = REPOS[i]
+            if exists(repo['dir']+'/.git'):
+                processes.append((repo, pull_repo(repo)))
+            else:
+                processes.append((repo, clone_repo(repo)))
+                if repo['python']:
+                    build = True
+            i += 1
+            continue
         for proc in processes:
             if not proc[1].poll() is None:
                 msgs = proc[1].communicate()
@@ -86,12 +92,15 @@ def check_repos(virt):
                         print '\033[32mOK\033[m'
                     else:
                         print '\033[33mUPDATED\033[m'
+                        print msgs[0]
                     if proc[0]['python']:
                         build = True
                 else:
                     print '\033[32mOK\033[m'
                 processes.pop(processes.index(proc))
                 break
+        if not processes and i == len(REPOS):
+            break
     if not build:
         return
     print '\nInstalling python packages',
@@ -166,7 +175,7 @@ def get_options():
         MUST be run from .emacs.d directory
         """
         )
-    parser.add_option('--compile', dest='compile', metavar="BOOL",
+    parser.add_option('--compile', dest='compile', action='store_true',
                       default=False,
                       help='compile current packages, no update.')
     parser.add_option('--virtual', dest='virt', metavar="BOOL",

@@ -81,27 +81,27 @@
   ;; the little line
   ;; function to remove the little line when completing, 
   ;; and also to set visual line mode
-  (defvar sanityinc/fci-mode-suppressed nil)
-  (defadvice popup-create (before suppress-fci-mode activate)
-    "Suspend fci-mode while popups are visible"
-    (set (make-local-variable 'sanityinc/fci-mode-suppressed) fci-mode)
-    (when fci-mode
-      (turn-off-fci-mode))
-    (when (not visual-line-mode)
-      (visual-line-mode)))
-  (defadvice popup-delete (after restore-fci-mode activate)
-    "Restore fci-mode when all popups have closed"
-    (when (and (not popup-instances) sanityinc/fci-mode-suppressed)
-      (setq sanityinc/fci-mode-suppressed nil)
-      (turn-on-fci-mode))
-    (when (not visual-line-mode)
-      (visual-line-mode)))
+  ;; (defvar sanityinc/fci-mode-suppressed nil)
+  ;; (defadvice popup-create (before suppress-fci-mode activate)
+  ;;   "Suspend fci-mode while popups are visible"
+  ;;   (set (make-local-variable 'sanityinc/fci-mode-suppressed) fci-mode)
+  ;;   (when fci-mode
+  ;;     (turn-off-fci-mode))
+  ;;   (when (not visual-line-mode)
+  ;;     (visual-line-mode)))
+  ;; (defadvice popup-delete (after restore-fci-mode activate)
+  ;;   "Restore fci-mode when all popups have closed"
+  ;;   (when (and (not popup-instances) sanityinc/fci-mode-suppressed)
+  ;;     (setq sanityinc/fci-mode-suppressed nil)
+  ;;     (turn-on-fci-mode))
+  ;;   (when (not visual-line-mode)
+  ;;     (visual-line-mode)))
   ;; the little line
-  (require 'fill-column-indicator)
-  (fci-mode)
-  (setq fci-rule-column 80)
-  (setq fci-rule-width 3)
-  (setq fci-rule-color "grey25")
+  ;; (require 'fill-column-indicator)
+  ;; (fci-mode)
+  ;; (setq fci-rule-column 80)
+  ;; (setq fci-rule-width 3)
+  ;; (setq fci-rule-color "grey25")
 
   ;; highlight columns
   (require 'highlight-indentation)
@@ -114,7 +114,7 @@
 
   ;; shortcuts enabdl C-c d / C-. (must be before the call of jedi)
   (setq jedi:setup-keys t) ; keys
-  ;;(setq jedi:tooltip-method nil) ; tool-tip popup in minibuffer
+  (setq jedi:tooltip-method nil) ; tool-tip popup in minibuffer
   (eval-when-compile (require 'jedi nil t))
   (require 'jedi)
   (require 'auto-complete)
