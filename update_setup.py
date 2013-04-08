@@ -178,7 +178,7 @@ def get_options():
     parser.add_option('--compile', dest='compile', action='store_true',
                       default=False,
                       help='compile current packages, no update.')
-    parser.add_option('--virtual', dest='virt', metavar="BOOL",
+    parser.add_option('--virtual', dest='virt', action='store_true',
                       default=False,
                       help='sudo not needed, we are working in a virtual env.')
     return parser.parse_args()[0]
