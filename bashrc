@@ -86,7 +86,7 @@ PROMPT_COMMAND=__prompt_command
 # enable color support of ls and also add handy aliases
 if [ "$TERM" != "dumb" ]; then
     eval "`dircolors -b`"
-    alias ls='ls --color'
+    alias ls='ls -G'
 fi
 
 # some more ls aliases
