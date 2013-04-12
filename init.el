@@ -115,6 +115,7 @@
   ;; shortcuts enabdl C-c d / C-. (must be before the call of jedi)
   (setq jedi:setup-keys t) ; keys
   (setq jedi:tooltip-method nil) ; tool-tip popup in minibuffer
+  (setq jedi:get-in-function-call-delay 100)
   (eval-when-compile (require 'jedi nil t))
   (require 'jedi)
   (require 'auto-complete)
