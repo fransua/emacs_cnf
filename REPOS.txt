@@ -41,11 +41,11 @@ repo   https://github.com/kiwanami/emacs-epc.git
 branch master 
 python False
 
-name   ertx 
-dir    lisp/ertx 
-repo   https://github.com/emacsmirror/ert-x.git
-branch builtin 
-python False
+# name   ertx 
+# dir    lisp/ertx 
+# repo   https://github.com/emacsmirror/ert-x.git
+# branch builtin 
+# python False
 
 name   autopair 
 dir    lisp/autopair 
@@ -74,7 +74,7 @@ python True
 name   jedi 
 dir    python_lib/jedi 
 repo   https://github.com/davidhalter/jedi.git
-branch master 
+branch dev
 python True
 
 name   sexpdata

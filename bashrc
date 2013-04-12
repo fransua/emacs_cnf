@@ -23,21 +23,20 @@ fi
 
 ##-ANSI-COLOR-CODES-##
 ###-Regular-###
-Color_Off="\033[0m"
-Red="\033[0;31m"
-Green="\033[0;32m"
-Purple="033[0;35"
+Color_Off='\[\033[0m\]'
+Red='\[\033[0;31m\]'
+Green='\[\033[0;32m\]'
+Purple='\[033[0;35\]'
 ####-Bold-####
-BRed="\033[1;31m"
-BPurple="\033[1;35m"
-BBlue="\033[01;34m"
+BRed='\[\033[1;31m\]'
+BPurple='\[\033[1;35m\]'
+BBlue='\[\033[01;34m\]'
 
 # set up command prompt
 function __prompt_command()
 {
     # capture the exit status of the last command
     EXIT="$?"
-    PS1=""
     ## add line number
     #if [ $EXIT -eq 0 ]; then PS1+="\[$Green\]\!:\[$Color_Off\]"; else PS1+="\[$Red\]\!:\[$Color_Off\]"; fi
     #if [ $EXIT -eq 0 ]; then PS1+="\[$Green\][✔]\[$Color_Off\]"; else PS1+="\[$Red\][✘]\[$Color_Off\]"; fi
@@ -45,7 +44,7 @@ function __prompt_command()
     # if logged in via ssh shows the ip of the client
     #if [ -n "$SSH_CLIENT" ]; then PS1+="\[$Yellow\]("${$SSH_CLIENT%% *}")\[$Color_Off\]"; fi
     # debian chroot stuff (take it or leave it)
-    PS1+="${debian_chroot:+($debian_chroot)}"
+    # PS1+="${debian_chroot:+($debian_chroot)}"
     # check if inside git repo
     local git_status="`git status -unormal 2>&1`"    
     if ! [[ "$git_status" =~ Not\ a\ git\ repo ]]; then
@@ -60,7 +59,6 @@ function __prompt_command()
 	    #purple
 	    local Color_On='\[\e[0;37;45;1m\]'
         fi
- 
         if [[ "$git_status" =~ On\ branch\ ([^[:space:]]+) ]]; then
             branch=${BASH_REMATCH[1]}
             test "$branch" != master || branch=' '
@@ -68,12 +66,13 @@ function __prompt_command()
             # Detached HEAD.  (branch=HEAD is a faster alternative.)
             branch="(`git describe --all --contains --abbrev=4 HEAD 2> /dev/null || echo HEAD`)"
         fi
- 
         # add the result to prompt
-	PS1+=$Color_On$branch$Color_Off" "
+	PS1=$Color_On$branch$Color_Off" "
+    else
+	PS1=$Color_On$Color_Off
     fi
     # basic information (user@host:path)
-    PS1+="\[$err_col\]\h\[$Color_Off\] \[$BBlue\]\w/\[$Color_Off\]"
+    PS1+="$err_col\h$Color_Off $BBlue\w/$Color_Off"
     # prompt $ or # for root
     if [ `whoami` = 'root' ]; then
 	PS1+=$BRed'\$'$Color_Off" "
@@ -82,11 +81,14 @@ function __prompt_command()
     fi
 }
 PROMPT_COMMAND=__prompt_command
-
 # enable color support of ls and also add handy aliases
 if [ "$TERM" != "dumb" ]; then
     eval "`dircolors -b`"
-    alias ls='ls -G'
+    if [ `uname` == "Darwin" ] ; then
+	alias ls='ls -G'
+    else
+	alias ls='ls --color'
+    fi
 fi
 
 # some more ls aliases
