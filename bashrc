@@ -32,6 +32,17 @@ BRed='\[\033[1;31m\]'
 BPurple='\[\033[1;35m\]'
 BBlue='\[\033[01;34m\]'
 
+# for python virtual env
+if [[ $VIRTUAL_ENV != "" ]]
+    then
+      # Strip out the path and just leave the env name
+      venv="${RED}(${VIRTUAL_ENV##*/}) "
+else
+      # In case you don't have one activated
+      venv=''
+fi
+
+
 # set up command prompt
 function __prompt_command()
 {
@@ -45,8 +56,12 @@ function __prompt_command()
     #if [ -n "$SSH_CLIENT" ]; then PS1+="\[$Yellow\]("${$SSH_CLIENT%% *}")\[$Color_Off\]"; fi
     # debian chroot stuff (take it or leave it)
     # PS1+="${debian_chroot:+($debian_chroot)}"
+    PS1=${venv}
     # check if inside git repo
-    local git_status="`git status --ignore-submodules=untracked -unormal 2>&1`"    
+    local git_status="`git status --ignore-submodules untracked -unormal 2>&1`"
+    if [[ "$git_status" =~ unknown\ option ]]; then
+	local git_status="`git status -unormal 2>&1`"
+    fi
     if ! [[ "$git_status" =~ Not\ a\ git\ repo ]]; then
         # parse the porcelain output of git status
         if [[ "$git_status" =~ nothing\ to\ commit ]]; then
@@ -67,9 +82,9 @@ function __prompt_command()
             branch="(`git describe --all --contains --abbrev=4 HEAD 2> /dev/null || echo HEAD`)"
         fi
         # add the result to prompt
-	PS1=$Color_On$branch$Color_Off" "
+	PS1+=$Color_On$branch$Color_Off" "
     else
-	PS1=$Color_On$Color_Off
+	PS1+=$Color_On$Color_Off
     fi
     # basic information (user@host:path)
     PS1+="$err_col\h$Color_Off $BBlue\w/$Color_Off"
