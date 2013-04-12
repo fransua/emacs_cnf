@@ -46,18 +46,18 @@ function __prompt_command()
     # debian chroot stuff (take it or leave it)
     # PS1+="${debian_chroot:+($debian_chroot)}"
     # check if inside git repo
-    local git_status="`git status -unormal 2>&1`"    
+    local git_status="`git status --ignore-submodules=untracked -unormal 2>&1`"    
     if ! [[ "$git_status" =~ Not\ a\ git\ repo ]]; then
         # parse the porcelain output of git status
         if [[ "$git_status" =~ nothing\ to\ commit ]]; then
             #Green
 	    local Color_On='\[\e[0;37;42;1m\]'
-        elif [[ "$git_status" =~ nothing\ added\ to\ commit\ but\ untracked\ files\ present ]]; then
+        elif [[ "$git_status" =~ nothing\ added\ to\ commit\ but ]]; then
             #orange
 	    local Color_On='\[\e[0;37;43;1m\]'
         else
-	    #purple
-	    local Color_On='\[\e[0;37;45;1m\]'
+	    #cyan
+	    local Color_On='\[\e[0;37;46;1m\]'
         fi
         if [[ "$git_status" =~ On\ branch\ ([^[:space:]]+) ]]; then
             branch=${BASH_REMATCH[1]}
