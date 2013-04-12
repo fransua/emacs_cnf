@@ -83,10 +83,10 @@ function __prompt_command()
 PROMPT_COMMAND=__prompt_command
 # enable color support of ls and also add handy aliases
 if [ "$TERM" != "dumb" ]; then
-    eval "`dircolors -b`"
     if [ `uname` == "Darwin" ] ; then
 	alias ls='ls -G'
     else
+	eval "`dircolors -b`"
 	alias ls='ls --color'
     fi
 fi
