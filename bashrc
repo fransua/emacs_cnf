@@ -58,7 +58,7 @@ function __prompt_command()
     # PS1+="${debian_chroot:+($debian_chroot)}"
     PS1=${venv}
     # check if inside git repo
-    local git_status="`git status --ignore-submodules untracked -unormal 2>&1`"
+    local git_status="`git status --ignore-submodules=untracked -unormal 2>&1`"
     if [[ "$git_status" =~ unknown\ option ]]; then
 	local git_status="`git status -unormal 2>&1`"
     fi
