@@ -104,18 +104,14 @@ def check_repos(virt):
     if not build:
         return
     print '\nInstalling python packages',
-    if not virt:
-        Popen('sudo -s', shell=True,
-              stdin=PIPE, stdout=PIPE, stderr=PIPE).communicate()
     for repo in REPOS:
         if repo['python']:
             print repo['dir'].split('/')[-1]
             Popen('mkdir -p ' + repo['dir'], shell=True).communicate()
             chdir(repo['dir'])
             Popen('{}python setup.py install'.format('' if virt else 'sudo '),
-                  shell=True)
+                  shell=True).communicate()
             chdir(HERE)
-    Popen('exit', shell=True).communicate()
     while True:
         sleep(2)
         if not None in [p.poll() for p in processes]:
