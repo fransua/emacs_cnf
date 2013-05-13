@@ -13,8 +13,19 @@
 (setq load-path (cons "~/.emacs.d/lisp/emacs-helm"	 load-path))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(if window-system
-      (set-frame-size (selected-frame) 165 59))
+(defun set-frame-size-according-to-resolution ()
+  (interactive)
+  (if window-system
+  (progn
+    ;; use 120 char wide window for largeish displays
+    ;; and smaller 80 column windows for smaller displays
+    ;; pick whatever numbers make sense for you
+    (if (> (x-display-pixel-width) 1280)
+           (set-frame-size (selected-frame) 165 75)
+           (set-frame-size (selected-frame) 165 59))
+    )))
+
+(set-frame-size-according-to-resolution)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; INSTALL NOTES
