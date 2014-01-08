@@ -303,3 +303,4 @@
 (global-set-key "\M-r" 'perl-replace)
 
 (put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)

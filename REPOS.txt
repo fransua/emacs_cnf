@@ -11,6 +11,12 @@ repo   https://github.com/emacs-helm/helm.git
 branch master
 python False
 
+name   direx
+dir    lisp/direx
+repo   https://github.com/m2ym/direx-el.git
+branch master
+python False
+
 name   popup-el
 dir    lisp/popup-el
 repo   https://github.com/auto-complete/popup-el.git
