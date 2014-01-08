@@ -34,6 +34,7 @@ REPOS   = get_repos()
 LIBS    = [HERE + '/lisp',
            HERE + '/lisp/deferred/',
            HERE + '/lisp/emacs-helm/',
+           HERE + '/lisp/pari/',
            HERE + '/lisp/direx/',
            HERE + '/lisp/ctable/',
            HERE + '/lisp/popup-el/',
