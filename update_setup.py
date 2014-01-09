@@ -5,7 +5,7 @@ compile all .el files in here
 """
 
 from optparse   import OptionParser
-from os         import walk, getcwd, chdir
+from os         import walk, getcwd, chdir, environ
 from os.path    import exists
 from subprocess import Popen, PIPE
 from time       import sleep
@@ -67,7 +67,7 @@ def pull_repo(repo):
     return p
 
 
-def check_repos(virt):
+def check_repos():
     processes = []
     build = False
     i = 0
@@ -106,6 +106,10 @@ def check_repos(virt):
     if not build:
         return
     print '\nInstalling python packages',
+    try:
+        virt = environ['VIRTUAL_ENV']
+    except KeyError:
+        virt = ''
     for repo in REPOS:
         if repo['python']:
             print repo['dir'].split('/')[-1]
@@ -153,7 +157,7 @@ def main():
     opts = get_options()
     if not opts.compile:
         print '\nRetrieving last versions from github...'
-        check_repos(opts.virt)
+        check_repos()
     
     print '\nCompiling lisp...'
     lisp_compile()
@@ -176,9 +180,6 @@ def get_options():
     parser.add_option('--compile', dest='compile', action='store_true',
                       default=False,
                       help='compile current packages, no update.')
-    parser.add_option('--virtual', dest='virt', action='store_true',
-                      default=False,
-                      help='sudo not needed, we are working in a virtual env.')
     return parser.parse_args()[0]
 
 if __name__ == "__main__":

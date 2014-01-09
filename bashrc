@@ -34,31 +34,30 @@ BRed='\[\033[1;31m\]'
 BPurple='\[\033[1;35m\]'
 BBlue='\[\033[01;34m\]'
 
-# for python virtual env
-if [[ $VIRTUAL_ENV != "" ]]
-    then
-      # Strip out the path and just leave the env name
-      venv="${RED}(${VIRTUAL_ENV##*/}) "
-else
-      # In case you don't have one activated
-      venv=''
-fi
-
-
 # set up command prompt
 function __prompt_command()
 {
     # capture the exit status of the last command
-    EXIT="$?"
+    # EXIT="$?"
     ## add line number
     #if [ $EXIT -eq 0 ]; then PS1+="\[$Green\]\!:\[$Color_Off\]"; else PS1+="\[$Red\]\!:\[$Color_Off\]"; fi
     #if [ $EXIT -eq 0 ]; then PS1+="\[$Green\][✔]\[$Color_Off\]"; else PS1+="\[$Red\][✘]\[$Color_Off\]"; fi
-    if [ $EXIT -eq 0 ]; then local err_col=$Green; else local err_col=$Red; fi
+    if [ $? -eq 0 ]; then local err_col=$Green; else local err_col=$Red; fi
     # if logged in via ssh shows the ip of the client
     #if [ -n "$SSH_CLIENT" ]; then PS1+="\[$Yellow\]("${$SSH_CLIENT%% *}")\[$Color_Off\]"; fi
     # debian chroot stuff (take it or leave it)
     # PS1+="${debian_chroot:+($debian_chroot)}"
-    PS1=${venv}
+
+   # for python virtual env
+   if [[ $VIRTUAL_ENV != "" ]]
+   then
+       # Strip out the path and just leave the env name
+       PS1="${RED}(${VIRTUAL_ENV##*/}) "
+   else
+       # In case you don't have one activated
+       PS1=''
+   fi
+
     # check if inside git repo
     local git_status="`git status --ignore-submodules=untracked -unormal 2>&1`"
     if [[ "$git_status" =~ unknown\ option ]]; then
