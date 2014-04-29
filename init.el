@@ -1,16 +1,17 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq frame-title-format "%f")
-(setq load-path (cons "~/.emacs.d/lisp"			 load-path))
-(setq load-path (cons "~/.emacs.d/lisp/epc"		 load-path))
-(setq load-path (cons "~/.emacs.d/lisp/ctable"		 load-path))
-(setq load-path (cons "~/.emacs.d/lisp/deferred"	 load-path))
-(setq load-path (cons "~/.emacs.d/lisp/auto-complete"	 load-path))
-(setq load-path (cons "~/.emacs.d/lisp/emacs-jedi"	 load-path))
-(setq load-path (cons "~/.emacs.d/lisp/highlight-indent" load-path))
-(setq load-path (cons "~/.emacs.d/lisp/autopair"	 load-path))
-(setq load-path (cons "~/.emacs.d/lisp/popup-el"	 load-path))
-(setq load-path (cons "~/.emacs.d/lisp/emacs-helm"	 load-path))
+(setq load-path (cons "~/.emacs.d/lisp"				  	load-path))
+(setq load-path (cons "~/.emacs.d/lisp/epc"		 		load-path))
+(setq load-path (cons "~/.emacs.d/lisp/ctable"		 		load-path))
+(setq load-path (cons "~/.emacs.d/lisp/deferred"	 		load-path))
+(setq load-path (cons "~/.emacs.d/lisp/auto-complete"	 		load-path))
+(setq load-path (cons "~/.emacs.d/lisp/emacs-jedi"			load-path))
+(setq load-path (cons "~/.emacs.d/lisp/highlight-indent" 	 	load-path))
+(setq load-path (cons "~/.emacs.d/lisp/autopair"		  	load-path))
+(setq load-path (cons "~/.emacs.d/lisp/popup-el"	 		load-path))
+(setq load-path (cons "~/.emacs.d/lisp/emacs-helm"	 	 	load-path))
+(setq load-path (cons "~/.emacs.d/lisp/emacs-python-environment"	load-path))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun set-frame-size-according-to-resolution ()
@@ -69,7 +70,7 @@
 ;; PYTHON!
 ;; function declarations:
 (declare-function global-auto-complete-mode            "auto-complete.el")
-(declare-function flymake-init-create-temp-buffer-copy "flymake.el"      )
+;;(declare-function flymake-init-create-temp-buffer-copy "flymake.el"      )
 
 ;; run hook
 (add-hook 'python-mode-hook 'my-python-hook)
@@ -245,13 +246,24 @@
  '(inhibit-startup-screen t)
  '(menu-bar-mode nil)
  '(org-agenda-files (quote ("~/Ubuntu One/org-things/first.org")))
- '(pc-selection-mode t nil (pc-select))
+;; '(pc-selection-mode t nil (pc-select))
  '(scroll-bar-mode nil)
  '(set-cursor-color "white")
  '(setq visible-bell t)
  '(show-paren-mode t)
  '(tool-bar-mode nil nil (tool-bar))
- '(truncate-lines t))
+ '(truncate-lines t)
+ '(delete-selection-mode 1)        ;; restores emacs <23 behaviors for copy/paste
+ '(mouse-drag-copy-region t)       ;; restores emacs <23 behaviors for copy/paste
+ '(select-active-regions nil)      ;; restores emacs <23 behaviors for copy/paste
+ '(x-select-enable-primary t)      ;; restores emacs <23 behaviors for copy/paste
+ '(x-select-enable-clipboard nil)  ;; restores emacs <23 behaviors for copy/paste
+)
+
+(setq select-active-regions nil
+      mouse-drag-copy-region t
+      x-select-enable-primary t
+      x-select-enable-clipboard nil) 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; key-bindings
@@ -269,6 +281,7 @@
  '(default ((t (:inherit nil :stipple nil :background "black" :foreground "grey85" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 90 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
  '(flymake-errline ((((class color)) (:underline "red"))))
  '(flymake-warnline ((((class color)) (:underline "yellow"))))
+ '(flymake-convline ((((class color)) (:underline "grey20"))))
  '(font-lock-builtin-face ((((class color) (min-colors 88) (background dark)) (:foreground "cyan"))))
  '(font-lock-comment-delimiter-face ((default nil) (((class color) (min-colors 16)) (:foreground "darkred"))))
  '(font-lock-comment-face ((t (:foreground "brown" :slant italic))))

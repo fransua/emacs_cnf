@@ -5,6 +5,12 @@ repo   https://github.com/tkf/emacs-jedi.git
 branch master
 python False
 
+name   emacs-python-environment
+dir    lisp/emacs-python-environment
+repo   https://github.com/tkf/emacs-python-environment.git
+branch master
+python False
+
 name   emacs-helm
 dir    lisp/emacs-helm
 repo   https://github.com/emacs-helm/helm.git

@@ -126,11 +126,15 @@ alias cp="cp -i"
 
 
 ## HISTORY
-export HISTSIZE=100000          # big big history
+export HISTSIZE=10000000          # big big history
 
-# share same history in all root shells
-#export PROMPT_COMMAND=$PROMPT_COMMAND:'history -a;history -n;'
+# avoid duplicates..
+export HISTCONTROL=ignoredups:erasedups  
+# append history entries..
 shopt -s histappend
+
+# After each command, save and reload history
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 # add date+time to commands in history
 HISTTIMEFORMAT="%m/%h - %H:%M:%S   "

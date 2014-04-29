@@ -33,6 +33,7 @@ REPOS   = get_repos()
 
 LIBS    = [HERE + '/lisp',
            HERE + '/lisp/deferred/',
+           HERE + '/lisp/emacs-python-environment',
            HERE + '/lisp/emacs-helm/',
            HERE + '/lisp/pari/',
            HERE + '/lisp/direx/',
@@ -148,7 +149,7 @@ def lisp_compile():
                 processes.pop(processes.index(proc))
                 break
     chdir(HERE + '/..')
-    
+
 
 def main():
     """
@@ -158,10 +159,10 @@ def main():
     if not opts.compile:
         print '\nRetrieving last versions from github...'
         check_repos()
-    
+
     print '\nCompiling lisp...'
     lisp_compile()
-    
+
     print '\nThe End\n\n'
 
 
